@@ -586,6 +586,10 @@ module UUIDTools
       return `#{ifconfig_path} #{all_switch}` if not ifconfig_path == nil
     end
 
+    def self.ipconfig
+      `ipconfig /all`
+    end
+
     # Match and return the first Mac address found
     def self.first_mac(instring)
       mac_regexps = [
@@ -626,7 +630,7 @@ module UUIDTools
 
         if os_class == :windows
           begin
-            @@mac_address = UUID.first_mac `ipconfig /all`
+            @@mac_address = UUID.first_mac(UUID.ipconfig)
           rescue
           end
         else # linux, bsd, macos, solaris
@@ -720,7 +724,7 @@ module UUIDTools
       return integer
     end
   end
-  
+
   ##
   # Constant Regexp that matches a UUID and captures its components.
   UUID_REGEXP = Regexp.new("^([0-9a-f]{8})-([0-9a-f]{4})-([0-9a-f]{4})-" +
